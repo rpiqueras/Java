@@ -1,0 +1,9 @@
+spring\example\forms\dao\impl\fakes\FakeTaskDAO.class
+spring\example\forms\models\User.class
+spring\example\forms\dao\impl\fakes\FakeDatasource.class
+spring\example\forms\controllers\TaskController.class
+spring\example\forms\dao\TaskDAO.class
+spring\example\forms\dao\UserDAO.class
+spring\example\forms\models\Task.class
+spring\example\forms\controllers\UserController.class
+spring\example\forms\dao\impl\fakes\FakeUserDAO.class
