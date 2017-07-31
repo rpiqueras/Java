@@ -1,0 +1,7 @@
+spring\example\rest\dao\impl\GenericDAOImpl.class
+spring\example\rest\config\SwaggerConfig.class
+spring\example\rest\dao\impl\SeriesDAOImpl.class
+spring\example\rest\controllers\SeriesController.class
+spring\example\rest\dao\SeriesDAO.class
+spring\example\rest\dao\impl\HibernateBaseDAO.class
+spring\example\rest\models\Series.class

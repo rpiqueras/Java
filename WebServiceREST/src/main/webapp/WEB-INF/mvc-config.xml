@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"       
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"       
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/mvc
+		   http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		   http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util-4.0.xsd
+		   http://www.springframework.org/schema/aop 
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <mvc:annotation-driven />
+    
+	<context:component-scan base-package="spring.example.rest"/> 
+
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	        <!-- Example: a logical view name of 'showMessage' is mapped to '/WEB-INF/jsp/showMessage.jsp' -->
+	        <property name="prefix" value="/WEB-INF/view/"/>
+	        <property name="suffix" value=".jsp"/>
+	</bean>
+
+	<!-- Dispatches requests mapped to POJO @Controllers implementations -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<!-- Default converters -->
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+
+				<ref bean="mappingJackson2HttpMessageConverter"/>
+			</list>
+		</property>
+	</bean>
+	
+    <!-- Configure Jackson behaviour -->
+	<bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="objectMapper" ref="jacksonObjectMapper"/>
+	</bean>
+	
+	<bean name="jacksonObjectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+	    <property name="featuresToDisable">
+	        <array>
+	            <util:constant static-field="com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS"/>
+	            <util:constant static-field="com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES"/>
+	            <util:constant static-field="com.fasterxml.jackson.databind.SerializationFeature.WRITE_NULL_MAP_VALUES"/>
+	        </array>
+	    </property>
+	
+	    <property name="serializationInclusion" value="NON_NULL"/>
+	
+		<property name="dateFormat">
+	    	<bean id="dateFormatISO8601" class="java.text.SimpleDateFormat">
+				<constructor-arg value="yyyy-MM-dd'T'HH:mm:ss.SSSZ" />
+			</bean>
+	   	</property>
+	</bean>
+	
+	<mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/" />
+	<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" />
+</beans>
