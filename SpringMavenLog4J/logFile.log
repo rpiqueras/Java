@@ -1,0 +1,8 @@
+2017-07-07 12:16:26 INFO  ClassPathXmlApplicationContext:510 - Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@53e25b76: startup date [Fri Jul 07 12:16:26 CEST 2017]; root of context hierarchy
+2017-07-07 12:16:26 INFO  XmlBeanDefinitionReader:315 - Loading XML bean definitions from class path resource [beansLogExample.xml]
+2017-07-07 12:16:26 INFO  DefaultListableBeanFactory:596 - Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@7ac7a4e4: defining beans [hawaianGreet,greetingEngine]; root of factory hierarchy
+2017-07-07 12:16:26 INFO  Main:22 - Info message
+2017-07-07 12:16:26 TRACE Main:23 - Simple trace
+2017-07-07 12:16:26 DEBUG Main:24 - Debug message
+2017-07-07 12:16:26 ERROR Main:25 - Error message
+2017-07-07 12:16:26 FATAL Main:26 - Fatal error

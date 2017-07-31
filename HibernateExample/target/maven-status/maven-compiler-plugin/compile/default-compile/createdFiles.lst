@@ -1,0 +1,5 @@
+org\hibernate\example\dao\HibernateSession.class
+org\hibernate\example\main\Main.class
+org\hibernate\example\model\Customer.class
+org\hibernate\example\dao\impl\CustomerDAOImpl.class
+org\hibernate\example\dao\CustomerDAO.class

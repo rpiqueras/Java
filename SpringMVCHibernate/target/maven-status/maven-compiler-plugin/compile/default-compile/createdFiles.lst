@@ -1,0 +1,6 @@
+spring\example\forms\dao\impl\UserDAOImpl.class
+spring\example\forms\dao\UserDAO.class
+spring\example\forms\models\PaginationCriteria.class
+spring\example\forms\models\User.class
+spring\example\forms\dao\impl\GenericDAOImpl.class
+spring\example\forms\controllers\UserController.class

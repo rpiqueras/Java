@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+	<bean id="kart1" class="models.Kart" p:name="SpringKart_1" p:speed="6" p:acceleration="6" p:grip="6"/>
+	<bean id="kart2" class="models.Kart" p:name="SpringKart_2" p:speed="7" p:acceleration="5" p:grip="6"/>
+	<bean id="kart3" class="models.Kart" p:name="SpringKart_3" p:speed="5" p:acceleration="6" p:grip="7"/>
+	<bean id="kart4" class="models.Kart" p:name="SpringKart_4" p:speed="8" p:acceleration="5" p:grip="5"/>
+	
+	<bean id="circuit" class="models.Circuit">
+		<constructor-arg name="name" value="Monza"/>
+		<constructor-arg name="distance" value="#{new java.util.Random().nextInt(100) + 100}"/>
+	</bean>
+	
+	<bean id="race" class="models.Race">
+		<property name="name" value="GP Spring"/>
+		<property name="karts">
+			<list>
+				<ref bean="kart1"/>
+				<ref bean="kart2"/>
+				<ref bean="kart3"/>
+				<ref bean="kart4"/>
+			</list>
+		</property>
+		<property name="circuit" ref="circuit"/>
+	</bean>
+	
+	<bean id="monitoringKart" class="monitors.MonitoringKart"/>
+	<bean id="monitoringCircuit" class="monitors.MonitoringCircuit"/>
+	
+	<aop:aspectj-autoproxy>
+		<aop:include name="monitoringKart"/>
+		<aop:include name="monitoringCircuit"/>
+	</aop:aspectj-autoproxy>
+</beans>

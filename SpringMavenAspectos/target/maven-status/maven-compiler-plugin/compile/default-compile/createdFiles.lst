@@ -1,0 +1,6 @@
+monitors\MonitoringCircuit.class
+models\Race.class
+monitors\MonitoringKart.class
+models\Circuit.class
+models\Kart.class
+models\MainAspectsExample.class

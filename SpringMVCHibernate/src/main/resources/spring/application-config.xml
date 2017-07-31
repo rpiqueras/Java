@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:security="http://www.springframework.org/schema/security"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+    xmlns:ws="http://jax-ws.dev.java.net/spring/core" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jee="http://www.springframework.org/schema/jee"
+    xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+    
+    <!-- Permitir anotaciones  -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+    <!-- Spring security -->
+    <security:http use-expressions="true">
+    	<security:intercept-url pattern="/resources/**" access="permitAll"/>
+    	<security:intercept-url pattern="/public/protected" access="isAuthenticated()"/>
+    	<security:intercept-url pattern="/public/**" access="permitAll"/>
+    	<security:intercept-url pattern="/" access="permitAll"/>
+    	<security:intercept-url pattern="/protected/**" access="isAuthenticated()"/>
+    	<security:intercept-url pattern="/admin/**" access="isAuthenticated() and principal.username=='root'"/>
+    	<security:intercept-url pattern="/admin" access="hasRole('admin')"/>
+    	<security:intercept-url pattern="/**" access="denyAll"/>
+    	<!-- Pagina login por defecto -->
+    	<security:form-login/>
+    	<security:logout/>
+		<!-- Pagina login personalizada -->
+<!-- 	    <security:form-login login-page="/myCustomLogin" default-target-url="/home" authentication-failure-url="/myCustomLogin?error" username-parameter="username" password-parameter="password"/> -->
+<!-- 	    <security:logout logout-success-url="/myCustomLogin?logout"/> -->
+    </security:http>
+    
+    <!-- Validacion usuarios spring security -->
+    <security:authentication-manager alias="authenticationManager">
+    	<security:authentication-provider user-service-ref="xmlUserService"/>
+    </security:authentication-manager>
+    
+    <!-- Creacion usuarios para validacion spring security -->
+    <security:user-service id="xmlUserService">
+    	<security:user name="root" password="root" authorities="normal, admin"/>
+    	<security:user name="sistema" password="formacion" authorities="normal"/>
+    	<security:user name="roberto" password="password" authorities="normal"/>
+    </security:user-service>
+    
+    <!-- Ejemplo cojer usuarios de base de datos  -->
+<!-- 	<bean id="dataSourceAuthentication" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> -->
+<!-- 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/> -->
+<!-- 		<property name="url" value="jdbc:mysql://localhost:3306/jdbc_test"/> -->
+<!-- 		<property name="username" value="root"/> -->
+<!-- 		<property name="password" value="root"/> -->
+<!-- 	</bean> -->
+<!-- 	<security:jdbc-user-service id="jdbcUserService" data-source-ref="dataSourceAuthentication" users-by-username-query="select username, password, true from users where username=?" -->
+<!-- 	authorities-by-username-query="select username, role from user_roles where username =?"/> -->
+    
+    <!-- Mapeo de objetos para autowired -->
+	<bean id="userDAO" class="spring.example.forms.dao.impl.GenericDAOImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!-- Conexion hibernate a base de datos -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://localhost:3306/jdbc_test"/>
+		<property name="username" value="root"/>
+		<property name="password" value="root"/>
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="annotatedClasses">
+			<list>
+				<value>spring.example.forms.models.User</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<!-- create-drop for create on restart, update for persist data on restart  -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+			</props>
+		</property>
+	</bean>
+</beans>
